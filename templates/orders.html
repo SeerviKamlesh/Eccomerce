@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main-content %}
+<div class="container mt-5">
+  <h3 class="mb-4">My Orders</h3>
+
+  {% if orders %}
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+      {% for order in orders %}
+        <div class="col">
+          <div class="card shadow-sm h-100">
+            <div class="row g-0 align-items-center">
+              <!-- Info on the Left -->
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">{{ order.product.title }}</h5>
+                  <p class="card-text">
+                    Quantity: <strong>{{ order.quantity }}</strong><br>
+                    Ordered on: {{ order.order_date }}<br>
+                    Payment ID: {{ order.payment.razorpay_payment_id|default:'N/A' }}
+                  </p>
+                  <span class="badge 
+                    {% if order.orderstatus == 'pending' %}bg-warning text-dark
+                    {% elif order.orderstatus == 'shipped' %}bg-primary
+                    {% elif order.orderstatus == 'delivered' %}bg-success
+                    {% elif order.orderstatus == 'cancelled' %}bg-danger{% endif %}">
+                    {{ order.orderstatus|title }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Product Image on the Right -->
+              <div class="col-md-4 text-end pe-3 pb-3">
+                <img src="{{ order.product.image.url }}" alt="{{ order.product.title }}"
+                     class="img-fluid rounded" style="max-height: 120px;">
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-muted">You haven’t placed any orders yet.</p>
+    <center>
+        <a href="{% url 'home' %}" class="btn btn-primary" style="width: 200px;">Continue Shopping</a>
+    </center>
+  {% endif %}
+</div>
+
+{% endblock main-content %}

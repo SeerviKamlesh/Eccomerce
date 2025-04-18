@@ -1,0 +1,109 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block main-content  %} 
+<div class="container">
+<div class="row mt-5" >
+   <div class="col-sm-6">
+    <h4>order summary</h4>
+    <hr>
+    {% for item in cart_items %}
+      <div class="card mb-2">
+        <div class="card-body">
+            <h5>Product:{{item.Product.name}}</h5>
+            <p>Quantity:{{item.quantity}}</p>
+            <p class="fw-bold">price:{{item.Product.price}}</p>
+        </div>
+      </div>
+     {% endfor %} 
+     <p class="fw-bold">Total Cost + Rs .40 ={{totalamount}}</p>
+     <small>Terms and Condition: Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit architecto accusantium minus blanditiis saepe in animi eos ipsum unde! Porro minima cupiditate reprehenderit maiores nam consectetur voluptas omnis facere sint.</small>
+   </div>
+   <div class="col-sm-4 offset-sm-1">
+      <h4>Select Shipping Address</h4>
+      <hr>
+      <form action="" method="post" id="myform">
+        {% csrf_token %}
+        {% for ad in add %}
+        <div class="card">
+           <div class="card-body">
+            <h5>{{ad.name}}</h5>
+            <p>mobile:{{ad.mobile}}</p>
+            <p>{{ad.locality}} {{ad.city}} {{ad.state}} - {{ad.zipcode}}</p>
+           </div>
+        </div>
+           <div class="form-check mt-2 mb-5">
+            <input type="radio" class="form-check-input" name="custid" id="custadd{{forloop.counter}}" value="{{ad.id}}" >
+            <label for="custadd{{forloop.counter}}">Address:{{forloop.counter}}</label>
+           </div>
+         {% endfor %}
+           <div class="form-check mb-3">
+            <label for="totalamount" class="form-label">Total Amount</label>
+            <input type="number" class="form-control" name="totalamount" value="{{totalamount}}" readonly>
+           </div>
+           <div class="text-end">
+              <button id="rzp-button1" type="button" class="btn btn-warning mt-3 px-2 fw-bold">payment</button>
+           </div>
+      </form>
+   </div>
+   <br>
+   <br>
+   <hr>
+</div>
+</div>
+
+
+
+{% endblock main-content  %}
+
+{% block paymentgateway %} 
+
+ {% comment %} <button id="rzp-button1">Pay</button>  {% endcomment %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+{% comment %} var form=document.getElementById('myform')
+console.log(form.elements['custid'].value) {% endcomment %}
+var options = {
+    "key": "rzp_test_LAhDAW8SGgP75S", // Enter the Key ID generated from the Dashboard
+    "amount":'{{razorpayamount}}', // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+    "name": "Mahalakshmi textiles", //your business name
+    "description": "Test Transaction",
+    "image": "https://example.com/your_logo",
+    "order_id": '{{order_id}}', //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "handler": function (response){
+        var form=document.getElementById('myform')
+        var custid=form.elements['custid'].value
+        userid={{request.user.id}}
+        // alert(response.razorpay_payment_id);
+        // alert(response.razorpay_order_id);
+        // alert(response.razorpay_signature)
+        window.location.href = `http://localhost:8000/paymentdone?custid=${custid}&order_id=${response.razorpay_order_id}&payment_id=${response.razorpay_payment_id}&userid=${userid}`;
+
+    },
+   
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+console.log("order_id:", "{{order_id}}");
+console.log("razorpayamount:", "{{razorpayamount}}");
+console.log("Amount being sent to Razorpay:", "{{razorpayamount}}");
+var rzp1 = new Razorpay(options);
+rzp1.on('payment.failed', function (response){
+  console.error("Payment Failed", response);
+  alert("Payment Failed:\n" +
+      "Code: " + (response.error?.code || "N/A") + "\n" +
+      "Description: " + (response.error?.description || "N/A") + "\n" +
+      "Reason: " + (response.error?.reason || "N/A") + "\n" +
+      "Order ID: " + (response.error?.metadata?.order_id || "N/A") + "\n" +
+      "Payment ID: " + (response.error?.metadata?.payment_id || "N/A")
+  );
+});
+document.getElementById('rzp-button1').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script>
+
+{% endblock paymentgateway %}

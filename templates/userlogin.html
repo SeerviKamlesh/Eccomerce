@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+{% block main-content %}
+<div class="container">
+    <div class="row my-3">
+      <div class="col-sm-5 offset-sm-3">
+          <h3>Customer Registration</h3>
+          <hr>
+    <form method="post" novalidate class="shadow p-5">
+        {% csrf_token %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-primary" role="alert">
+                {{message}}
+            </div>
+            {% endfor %} 
+        {% endif %}   
+        <div class="mb-1">
+        <label for="exampleInputEmail1" class="form-label" >username</label>
+        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="username">
+        
+        </div>
+        <div class="mb-1">
+        <label for="exampleInputPassword1" class="form-label" >Password</label>
+        <input type="password" class="form-control" id="exampleInputPassword1"name="password">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">login</button>
+        <p>new user ?</p>
+        <a href="{% url 'registration' %}">register</a>
+    </form>
+</div>
+</div>
+</div>
+
+{% endblock main-content %}

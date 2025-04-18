@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .header { background-color: #4CAF50; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; }
+        .footer { background-color: #f1f1f1; padding: 10px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Order Confirmation</h1>
+        </div>
+        <div class="content">
+            <p>Dear {{ user.first_name }} {{ user.last_name }},</p>
+            <p>Thank you for your order!</p>
+            
+            <h2>Order Details:</h2>
+            <ul>
+                <li><strong>Order ID:</strong> {{ order_id }}</li>
+                <li><strong>Payment ID:</strong> {{ payment_id }}</li>
+                <li><strong>Amount:</strong> {{ amount }}</li>
+            </ul>
+            
+            <p>Your order has been successfully placed and will be delivered within 4-5 business days.</p>
+            
+            <p>If you have any questions about your order, please contact our customer service.</p>
+        </div>
+        <div class="footer">
+            <p>Thank you for shopping with us!</p>
+        </div>
+    </div>
+</body>
+</html>

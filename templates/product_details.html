@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main-content  %}
+{% if messages %}
+  <div class="container mt-3">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+  <div class="container">
+     <div class="row flex justify-content-between">
+        <div class="img2 col-lg-5 mt-5">
+            <img src="{{product.image.url}}" class="image col-xs-6 col-sm-12 col-lg-12 mt-3 text-sm-center w-75 h-75" alt="">
+            <h5 style="font-family: Georgia;">{{product.name}}</h5>
+        </div>
+        <div class="productdetail col-lg-5 my-3">
+            <h3 style="font-family: Georgia;">{{product.name}}</h3>
+            <h5>Rs {{product.price}}/-</h5>
+            <h5>Product Description :</h5>
+            <ul><li>{{product.description}}</li></ul>
+            <a href="{% url 'add_to_wishlist' product.id %}"class='btn btn-outline-danger'>Add to wishlist</a>
+            <a href="{% url 'add_to_cart' product.id %}"class='btn btn-outline-primary mx-3'>Add to Cart</a>
+        </div>
+     </div>
+  </div>
+
+
+{% endblock main-content %}

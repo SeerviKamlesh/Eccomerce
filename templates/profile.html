@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+{% block main-content %}
+<div class="container mx-2 my-5">
+    <div class="row">
+            
+        <!-- </div> -->
+        <div class="col-sm-2 border-end">
+            <ul class="list-unstyled">
+                <li class="d-grid"><a href="{% url 'profile' %}" class="btn btn-primary">Profile</a></li>
+                <br>
+                <li class="d-grid"><a href="{% url 'Add_Address' %}" class="btn border">Add Address</a></li>
+                <br>
+                <li class="d-grid"><a href="{% url 'address' %}" class="btn border">Address</a></li>
+                <br>
+                <li class="d-grid"><a href="{% url 'my_orders' %}" class="btn border">My Orders</a></li>
+            </ul>
+        </div>
+        <!-- <div class="row"> -->
+        <div class="col-sm-9 offset-sm-1">
+            <div class="bg-primary text-center text-white "><h4>Dash Board</h4></div>
+            <div class="row">
+                <div class="card border">
+                    <div class="card-body d-flex justify-content-between">
+                        <div class="">
+                            <p class=""><span class="fw-semibold">Name</span> :{{request.user}}</p>
+                            <p class=""><span class="fw-semibold">Email</span> {{user.email}}</p>
+                            <p class=""><span class="fw-semibold">ID</span>:{{user.id}}</p>
+
+                        </div>
+                        <div class="">
+                            <div style="height: 100px; width: 100px;">
+                               <img src="/media/banner_images/profile.jpeg" alt=""style="width: 125px; height: 125px; object-fit: contain;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if orders %}
+            <div class="row">
+                <table class="table">
+                    <thead>
+                      <tr class="border">
+                        <th scope="col">Order ID</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Order Date</th>
+                        <th scope="col">Payment Id</th>
+            
+                      </tr>
+                    </thead>
+                    <tbody>
+                     {% for each in orders %}  
+                      <tr class="border">
+                        <td>{{each.payment.razorpay_order_id}}</td>
+                        <td>{{each.product.name}}</td>
+                        <td>{{each.quantity}}</td>
+                        <td>{{each.order_date}}</td>
+                        <td>{{each.payment.razorpay_payment_id}}</td>
+                      
+                      </tr>
+                      {% endfor %}  
+                    </tbody>
+                  </table>
+            </div>
+            {% endif %}
+        </div>
+  </div>
+</div>
+{% endblock main-content %}
